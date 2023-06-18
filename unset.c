@@ -6,7 +6,7 @@
 /*   By: aaouassa <aaouassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 18:45:07 by aaouassa          #+#    #+#             */
-/*   Updated: 2023/06/16 15:58:58 by aaouassa         ###   ########.fr       */
+/*   Updated: 2023/06/17 20:35:57 by aaouassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	ft_unset_cmmd(char **args)
 		if (!tmp[i] || ft_checkin_error(tmp[i]))
 		{
 			printf("minishell: unset: `%s': not a valid identifier\n", args[1]);
-			// g_glob.g_exit_status = 1;
+			g_glob.g_exit_status = 1;
 			continue ;
 		}
 		ft_unset_env(tmp[i]);

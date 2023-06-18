@@ -6,7 +6,7 @@
 /*   By: aaouassa <aaouassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:23:46 by aaouassa          #+#    #+#             */
-/*   Updated: 2023/06/16 16:46:25 by aaouassa         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:32:16 by aaouassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,21 @@
 #include <fcntl.h>
 # include <sys/stat.h>
 # include <sys/errno.h>
+
+typedef struct s_argument
+{
+	char				*arg;
+	struct s_argument	*next;
+}						t_argument;
+
+
+// typedef struct s_command
+// {
+// 	char				pipe;
+// 	char				*cmnd;
+// 	t_argument			*argument;
+// 	struct s_command	*next;
+// }						t_command;
 
 typedef struct s_glob
 {
@@ -55,6 +70,7 @@ typedef struct s_data
 	int		n_infiles;
 	char	**outfiles;
 	char	**append;
+	char	**infiles;
 	char	**hd;
 	int		end[2];
 	char	**envp;

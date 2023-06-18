@@ -6,7 +6,7 @@
 /*   By: aaouassa <aaouassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:20:32 by aaouassa          #+#    #+#             */
-/*   Updated: 2023/06/16 16:23:23 by aaouassa         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:38:41 by aaouassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,77 +44,91 @@ char	*find_path(char *cmd, char **env)
 			return (path);
 		i++;
 	}
-	ft_cmd_err(cmd);
-	exit(g_glob.g_exit_status);
+	//ft_cmd_err(cmd);
+	//exit(g_glob.g_exit_status);
 }
 
-int	err_out(t_list *exec, int mode, int mode1, int i)
-{
-	if (mode == 0)
-	{
-		if (g_glob.fdout == -1)
-		{
-			if (((t_data *)exec->content)->outfiles && g_glob.j == 0)
-				error_msg(((t_data *)exec->content)->outfiles[i], errno);
-			else if (((t_data *)exec->content)->append)
-				error_msg(((t_data *)exec->content)->append[i], errno);
-			if (mode1 == 0)
-				exit(1);
-			else
-				return (1);
-		}
-	}
-	else
-	{
-		if (((t_data *)exec->content)->error == 1)
-		{
-			if (mode1 == 0)
-				exit(1);
-			else
-				return (1);
-		}
-	}
-	return (0);
-}
+// int	err_out(t_list *exec, int mode, int mode1, int i)
+// {
+// 	if (mode == 0)
+// 	{
+// 		if (g_glob.fdout == -1)
+// 		{
+// 			if (((t_data *)exec->content)->outfiles && g_glob.j == 0)
+// 				error_msg(((t_data *)exec->content)->outfiles[i], errno);
+// 			else if (((t_data *)exec->content)->append)
+// 				error_msg(((t_data *)exec->content)->append[i], errno);
+// 			if (mode1 == 0)
+// 				exit(1);
+// 			else
+// 				return (1);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		if (((t_data *)exec->content)->error == 1)
+// 		{
+// 			if (mode1 == 0)
+// 				exit(1);
+// 			else
+// 				return (1);
+// 		}
+// 	}
+// 	return (0);
+// }
 
-void	open_out(t_list *exec, int i)
-{
-	if (((t_data *)exec->content)->outfiles
-		|| ((t_data *)exec->content)->append)
-	{
-		if (((t_data *)exec->content)->outfiles)
-		{
-			g_glob.j = 0;
-			while (((t_data *)exec->content)->outfiles[i])
-				g_glob.fdout = open(((t_data *)exec->content)->outfiles[i++],
-						O_WRONLY | O_CREAT | O_TRUNC, 0777);
-			dup2(g_glob.fdout, 1);
-			close(g_glob.fdout);
-		}
-		if (((t_data *)exec->content)->append)
-		{
-			i = 0;
-			g_glob.j = 1;
-			while (((t_data *)exec->content)->append[i])
-				g_glob.fdout = open(((t_data *)exec->content)->append[i++],
-						O_WRONLY | O_CREAT | O_APPEND, 0777);
-			dup2(g_glob.fdout, 1);
-			close(g_glob.fdout);
-		}
-		err_out(exec, 0, 0, i - 1);
-	}
-	err_out(exec, 1, 0, i - 1);
-}
+// void	open_out(t_list *exec, int i)
+// {
+// 	if (((t_data *)exec->content)->outfiles
+// 		|| ((t_data *)exec->content)->append)
+// 	{
+// 		if (((t_data *)exec->content)->outfiles)
+// 		{
+// 			g_glob.j = 0;
+// 			while (((t_data *)exec->content)->outfiles[i])
+// 				g_glob.fdout = open(((t_data *)exec->content)->outfiles[i++],
+// 						O_WRONLY | O_CREAT | O_TRUNC, 0777);
+// 			dup2(g_glob.fdout, 1);
+// 			close(g_glob.fdout);
+// 		}
+// 		if (((t_data *)exec->content)->append)
+// 		{
+// 			i = 0;
+// 			g_glob.j = 1;
+// 			while (((t_data *)exec->content)->append[i])
+// 				g_glob.fdout = open(((t_data *)exec->content)->append[i++],
+// 						O_WRONLY | O_CREAT | O_APPEND, 0777);
+// 			dup2(g_glob.fdout, 1);
+// 			close(g_glob.fdout);
+// 		}
+// 		err_out(exec, 0, 0, i - 1);
+// 	}
+// 	err_out(exec, 1, 0, i - 1);
+// }
 
 int	open_out1(t_list *exec, int i)
 {
+	if (((t_data *)exec->content)->infiles)
+	{
+		while (((t_data *)exec->content)->infiles[i])
+			g_glob.fd_in = open(((t_data *)exec->content)->infiles[i++],
+					O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			if(g_glob.fd_in == -1)
+			{
+				write(2, "bash: No such file or directory\n", 33);
+			}
+	}
 	if (((t_data *)exec->content)->outfiles)
 	{
 		while (((t_data *)exec->content)->outfiles[i])
 			g_glob.fdout = open(((t_data *)exec->content)->outfiles[i++],
 					O_WRONLY | O_CREAT | O_TRUNC, 0777);
-		dup2(g_glob.fdout, 1);
-		close(g_glob.fdout);
+			if(g_glob.fdout == -1)
+			{
+				write(2, "bash: No such file or directory\n", 33);
+			}
+		// dup2(g_glob.fdout, 1);
+		// close(g_glob.fdout);
 	}
 	if (((t_data *)exec->content)->append)
 	{
@@ -122,13 +136,17 @@ int	open_out1(t_list *exec, int i)
 		while (((t_data *)exec->content)->append[i])
 			g_glob.fdout = open(((t_data *)exec->content)->append[i++],
 					O_WRONLY | O_CREAT | O_APPEND, 0777);
-		dup2(g_glob.fdout, 1);
-		close(g_glob.fdout);
+			if(g_glob.fdout == -1)
+			{
+				write(2, "bash: No such file or directory\n", 33);
+			}
+		// dup2(g_glob.fdout, 1);
+		// close(g_glob.fdout);
 	}
-	if (err_out(exec, 0, 1, i - 1) == 1)
-		return (1);
-	if (err_out(exec, 1, 1, i - 1) == 1)
-		return (1);
+	// if (err_out(exec, 0, 1, i - 1) == 1)
+	// 	return (1);
+	// if (err_out(exec, 1, 1, i - 1) == 1)
+	// 	return (1);
 	return (0);
 }
 

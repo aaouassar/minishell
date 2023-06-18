@@ -6,13 +6,11 @@
 /*   By: aaouassa <aaouassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 11:51:25 by aaouassa          #+#    #+#             */
-/*   Updated: 2023/06/16 16:51:55 by aaouassa         ###   ########.fr       */
+/*   Updated: 2023/06/16 17:02:52 by aaouassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 t_data	*init_data(char **envp)
 {
